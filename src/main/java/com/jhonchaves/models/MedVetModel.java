@@ -1,5 +1,6 @@
 package com.jhonchaves.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 
@@ -15,6 +16,7 @@ public class MedVetModel extends PessoaModel implements Serializable {
     private String crmv;
 
     @OneToOne
+    @JsonIgnore
     private UsuarioModel usuarioModel;
 
     public MedVetModel(){}

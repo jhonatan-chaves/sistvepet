@@ -16,6 +16,7 @@ public class TutorModel extends PessoaModel implements Serializable {
     private static final Long serialVersionUID = 1L;
 
    @OneToMany(mappedBy = "tutor",  orphanRemoval = true, cascade = CascadeType.ALL)
+   @JsonIgnore
    private List<PetModel> pets = new ArrayList<PetModel>();
 
 
