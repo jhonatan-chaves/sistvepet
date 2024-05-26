@@ -1,17 +1,15 @@
 package com.jhonchaves.models;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @MappedSuperclass
 public class PessoaModel implements Serializable {
 
-    private static final Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +19,7 @@ public class PessoaModel implements Serializable {
     protected String cpf;
     protected char sex;
     protected Date birthDate;
+
 
     public Long getId() {
         return id;

@@ -1,24 +1,28 @@
 package com.jhonchaves.services;
 
 import com.jhonchaves.RecordsDTO.MedVetRecordDTO;
+import com.jhonchaves.models.ContatoModel;
 import com.jhonchaves.models.MedVetModel;
 import com.jhonchaves.repository.MedVetRepository;
+
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
+
 @Service
 public class MedVetService {
 
-    @Autowired
-    private MedVetRepository medVetRepository;
+
+    private final MedVetRepository medVetRepository;
+
+    public MedVetService (MedVetRepository medVetRepository){
+        this.medVetRepository = medVetRepository;
+    }
+
 
     public MedVetModel save(MedVetRecordDTO medVetRecordDTO){
         Optional<MedVetModel> existCpf = medVetRepository.findByCpf(medVetRecordDTO.cpf());
@@ -27,6 +31,14 @@ public class MedVetService {
         }
         MedVetModel medVet = new MedVetModel();
         BeanUtils.copyProperties(medVetRecordDTO,medVet);
+        if (medVetRecordDTO.contatos() != null) {
+            medVetRecordDTO.contatos().forEach(contatoDTO -> {
+                ContatoModel contato = new ContatoModel();
+                BeanUtils.copyProperties(contatoDTO, contato);
+                contato.setMedVet(medVet);
+                medVet.getContatos().add(contato);
+            });
+        }
         medVetRepository.save(medVet);
         return medVet;
     }

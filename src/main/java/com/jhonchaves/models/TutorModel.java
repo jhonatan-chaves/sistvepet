@@ -1,23 +1,21 @@
 package com.jhonchaves.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class TutorModel extends PessoaModel implements Serializable {
-    private static final Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
    @OneToMany(mappedBy = "tutor",  orphanRemoval = true, cascade = CascadeType.ALL)
    @JsonIgnore
    private List<PetModel> pets = new ArrayList<PetModel>();
+
+   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "tutor")
+   private Set<ContatoModel> contatos = new HashSet<>();
 
 
 
@@ -39,6 +37,14 @@ public class TutorModel extends PessoaModel implements Serializable {
 
     public void setPets(List<PetModel> pets) {
         this.pets = pets;
+    }
+
+    public Set<ContatoModel> getContatos() {
+        return contatos;
+    }
+
+    public void setContatos(Set<ContatoModel> contatos) {
+        this.contatos = contatos;
     }
 }
 

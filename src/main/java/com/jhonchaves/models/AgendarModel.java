@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 public class AgendarModel implements Serializable {
-    private static final Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,6 +19,7 @@ public class AgendarModel implements Serializable {
     private StatusEnum status;
 
     private Date dataHoraCriacao;
+    @JoinColumn(name = "data_hora_consulta")
     private Date dataHoraConsulta;
 
     @ManyToOne

@@ -10,14 +10,24 @@ import com.jhonchaves.repository.AgendarRepository;
 import com.jhonchaves.repository.MedVetRepository;
 import com.jhonchaves.repository.PetRepository;
 import com.jhonchaves.repository.TutorRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+
+import java.util.Date;
+import java.util.List;
+
+
 @Service
 public class AgendarService {
+
+
 
     @Autowired
     private AgendarRepository agendarRepository;
@@ -27,6 +37,9 @@ public class AgendarService {
     private MedVetRepository medVetRepository;
     @Autowired
     private PetRepository petRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     public Object save(AgendarRequestDTO data){
         AgendarModel agendar = new AgendarModel();
@@ -68,6 +81,42 @@ public class AgendarService {
 
 
     }
+
+
+    public List<AgendarModel> listarConsultasPorStatus(StatusEnum status, Date dataConsulta, String cpf){
+
+        StringBuilder queryString = new StringBuilder("SELECT c FROM AgendarModel c JOIN c.tutor t WHERE 1=1"); //StringBuilder("SELECT c FROM AgendarModel c WHERE 1=1");
+
+        if (status != null) {
+            queryString.append(" AND c.status = :status");
+        }
+        if (dataConsulta != null) {
+            queryString.append(" AND FUNCTION('DATE', c.dataHoraConsulta) = :dataConsulta");
+        }
+
+        if (cpf != null){
+            queryString.append(" AND t.cpf = :cpf");
+        }
+
+        TypedQuery<AgendarModel> query = entityManager.createQuery(queryString.toString(), AgendarModel.class);
+
+        if (status != null) {
+            query.setParameter("status", status);
+        }
+        if (dataConsulta != null) {
+            query.setParameter("dataConsulta", dataConsulta, TemporalType.DATE);
+        }
+
+        if(cpf != null){
+            query.setParameter("cpf", cpf);
+        }
+
+       // List<AgendarModel> resultList = query.getResultList();
+
+        return query.getResultList();
+    }
+
+
 
     /*
     *

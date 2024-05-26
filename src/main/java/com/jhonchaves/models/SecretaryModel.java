@@ -1,20 +1,23 @@
 package com.jhonchaves.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 public class SecretaryModel extends PessoaModel implements Serializable {
-    private static final Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private Long registration;
     private String office;
 
     @OneToOne
     private UsuarioModel usuarioModel;
+
+
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "secretary")
+    private Set<ContatoModel> contatos = new HashSet<>();
 
 
     public SecretaryModel(){}
@@ -56,5 +59,13 @@ public class SecretaryModel extends PessoaModel implements Serializable {
 
     public void setUsuarioModel(UsuarioModel usuarioModel) {
         this.usuarioModel = usuarioModel;
+    }
+
+    public Set<ContatoModel> getContatos() {
+        return contatos;
+    }
+
+    public void setContatos(Set<ContatoModel> contatos) {
+        this.contatos = contatos;
     }
 }

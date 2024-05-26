@@ -1,10 +1,13 @@
 package com.jhonchaves;
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 
+
+
+//@OpenAPIDefinition(info = @Info(title = "SistVePet", version = "1", description = "api para clinica veterinaria"))
 @SpringBootApplication
 public class SistvepetApplication {
 

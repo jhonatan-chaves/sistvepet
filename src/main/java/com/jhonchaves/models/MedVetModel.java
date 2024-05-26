@@ -1,16 +1,15 @@
 package com.jhonchaves.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 public class MedVetModel extends PessoaModel implements Serializable {
 
-    private static final Long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private String specialist;
     private String crmv;
@@ -19,10 +18,14 @@ public class MedVetModel extends PessoaModel implements Serializable {
     @JsonIgnore
     private UsuarioModel usuarioModel;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "medVet")
+    private Set<ContatoModel> contatos = new HashSet<>();
+
+
     public MedVetModel(){}
 
     public MedVetModel(Long id, String firstName, String middleName, String cpf, char sex,
-                       Date birthDate,String specialist, String crmv){
+                       Date birthDate,String specialist, String crmv, Set<ContatoModel> contatos){
         super.id = id;
         super.firstName = firstName;
         super.middleName = middleName;
@@ -31,6 +34,7 @@ public class MedVetModel extends PessoaModel implements Serializable {
         super.birthDate = birthDate;
         this.specialist = specialist;
         this.crmv = crmv;
+        this.contatos = contatos;
 
     }
 
@@ -57,5 +61,13 @@ public class MedVetModel extends PessoaModel implements Serializable {
 
     public void setUsuarioModel(UsuarioModel usuarioModel) {
         this.usuarioModel = usuarioModel;
+    }
+
+    public Set<ContatoModel> getContatos() {
+        return contatos;
+    }
+
+    public void setContatos(Set<ContatoModel> contatos) {
+        this.contatos = contatos;
     }
 }
