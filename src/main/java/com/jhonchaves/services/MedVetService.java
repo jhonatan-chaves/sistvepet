@@ -1,6 +1,8 @@
 package com.jhonchaves.services;
 
 import com.jhonchaves.RecordsDTO.MedVetRecordDTO;
+import com.jhonchaves.domain.Email;
+import com.jhonchaves.domain.NumeroCelular;
 import com.jhonchaves.models.ContatoModel;
 import com.jhonchaves.models.MedVetModel;
 import com.jhonchaves.repository.MedVetRepository;
@@ -31,17 +33,32 @@ public class MedVetService {
         }
         MedVetModel medVet = new MedVetModel();
         BeanUtils.copyProperties(medVetRecordDTO,medVet);
-        if (medVetRecordDTO.contatos() != null) {
+
+        if(medVetRecordDTO.contatos() != null){
             medVetRecordDTO.contatos().forEach(contatoDTO -> {
-                ContatoModel contato = new ContatoModel();
+               // ContatoModel contato =
+                       // ContatoModel.createForMedVet(contatoDTO.tipo(), contatoDTO.valor(),
+                                                    // contatoDTO.principal(), medVet);
+               // medVet.getContatos().add(contato);
+            });
+        }
+
+
+        medVetRepository.save(medVet);
+        return medVet;
+    }
+
+
+     /* if (medVetRecordDTO.contatos() != null) {
+            medVetRecordDTO.contatos().forEach(contatoDTO -> {
+                Email email = new Email(contatoDTO.email());
+                NumeroCelular numero = new NumeroCelular(contatoDTO.numeroCelular());
+                ContatoModel contato = ContatoModel.createForMedVet(numero, email, medVet);
                 BeanUtils.copyProperties(contatoDTO, contato);
                 contato.setMedVet(medVet);
                 medVet.getContatos().add(contato);
             });
-        }
-        medVetRepository.save(medVet);
-        return medVet;
-    }
+        }*/
 
     public MedVetModel getMedVet(Long id){
         Optional<MedVetModel> medVetOb = medVetRepository.findById(id);

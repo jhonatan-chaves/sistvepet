@@ -1,10 +1,13 @@
 package com.jhonchaves.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jhonchaves.domain.EntidadeRelacionada;
+import com.jhonchaves.domain.TipoContato;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
-import java.util.UUID;
+
 
 @Entity
 public class ContatoModel implements Serializable {
@@ -16,9 +19,13 @@ public class ContatoModel implements Serializable {
     private Long idContato;
 
 
-    private String numeroCelular;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "O tipo de contato não pode estar vazio.")
+    private TipoContato tipo;
 
-    private String email;
+    private String valor;
+
+    private Boolean principal;
 
 
     @ManyToOne
@@ -41,42 +48,36 @@ public class ContatoModel implements Serializable {
 
     public ContatoModel(){}
 
-    public ContatoModel(Long idContato, String numeroCelular, String email, MedVetModel medVet) {
+    public ContatoModel(Long idContato, TipoContato tipo, String valor, Boolean principal, MedVetModel medVet) {
         this.idContato = idContato;
-        this.numeroCelular = numeroCelular;
-        this.email = email;
+        this.tipo = tipo;
+        this.valor = valor;
+        this.principal = principal;
         this.medVet = medVet;
 
     }
 
-    public ContatoModel(Long idContato, String numeroCelular, String email, TutorModel tutor) {
+    public ContatoModel(Long idContato, TipoContato tipo, String valor, Boolean principal, TutorModel tutor) {
         this.idContato = idContato;
-        this.numeroCelular = numeroCelular;
-        this.email = email;
+        this.tipo = tipo;
+        this.valor = valor;
+        this.principal = principal;
         this.tutor = tutor;
 
     }
 
-    public ContatoModel(Long idContato, String numeroCelular, String email, SecretaryModel secretary) {
+    public ContatoModel(Long idContato, TipoContato tipo, String valor, Boolean principal, SecretaryModel secretary) {
         this.idContato = idContato;
-        this.numeroCelular = numeroCelular;
-        this.email = email;
+        this.tipo = tipo;
+        this.valor = valor;
+        this.principal = principal;
         this.secretary = secretary;
 
     }
 
-    public static ContatoModel createForMedVet(String numeroCelular, String email, MedVetModel medVet) {
-        return new ContatoModel(null, numeroCelular, email, medVet);
+    public void setEntidadeRelacionada(EntidadeRelacionada entidade) {
+        entidade.adicionarContato(this);
     }
-
-    public static ContatoModel createForTutor(String numeroCelular, String email, TutorModel tutor) {
-        return new ContatoModel(null, numeroCelular, email, tutor);
-    }
-
-    public static ContatoModel createForSecretary(String numeroCelular, String email, SecretaryModel secretary) {
-        return new ContatoModel(null, numeroCelular, email, secretary);
-    }
-
 
     public Long getIdContato() {
         return idContato;
@@ -86,20 +87,28 @@ public class ContatoModel implements Serializable {
         this.idContato = idContato;
     }
 
-    public String getNumeroCelular() {
-        return numeroCelular;
+    public TipoContato getTipo() {
+        return tipo;
     }
 
-    public void setNumeroCelular(String numeroCelular) {
-        this.numeroCelular = numeroCelular;
+    public void setTipo(TipoContato tipo) {
+        this.tipo = tipo;
     }
 
-    public String getEmail() {
-        return email;
+    public String getValor() {
+        return valor;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
+    public Boolean getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(Boolean principal) {
+        this.principal = principal;
     }
 
     public MedVetModel getMedVet() {

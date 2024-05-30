@@ -1,13 +1,14 @@
 package com.jhonchaves.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jhonchaves.domain.EntidadeRelacionada;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.*;
 
 @Entity
-public class MedVetModel extends PessoaModel implements Serializable {
+public class MedVetModel extends PessoaModel implements Serializable, EntidadeRelacionada {
 
     private static final long serialVersionUID = 1L;
 
@@ -20,6 +21,12 @@ public class MedVetModel extends PessoaModel implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "medVet")
     private Set<ContatoModel> contatos = new HashSet<>();
+
+    @Override
+    public void adicionarContato(ContatoModel contato) {
+        contato.setMedVet(this);
+        contatos.add(contato);
+    }
 
 
     public MedVetModel(){}
@@ -70,4 +77,6 @@ public class MedVetModel extends PessoaModel implements Serializable {
     public void setContatos(Set<ContatoModel> contatos) {
         this.contatos = contatos;
     }
+
+
 }
